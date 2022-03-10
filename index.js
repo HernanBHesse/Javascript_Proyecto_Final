@@ -1,12 +1,17 @@
-function tiempoEspAT() {
-    return tiempoEspA += 15;
+const tiempoEspAT = () => tiempoEspA += 15;
+
+const tiempoEspBT = () => tiempoEspB += 15;
+
+class turno {
+    constructor(numero, abogado, cliente, horario) {
+        this.Turno = numero;
+        this.Abogado = abogado;
+        this.Cliente = cliente;
+        this.Horario = horario;
+    }
 }
 
-function tiempoEspBT() {
-    return tiempoEspB += 15;
-}
-
-function drGomez() {
+const  drGomez = () => {
     if (tiempoEspA == 0) {
         alert(`${nombreCom} No tiene tiempo de espera con el Dr. Gomez`);
         tiempoEspAT();
@@ -14,10 +19,12 @@ function drGomez() {
         alert(`${nombreCom} Tiene un tiempo de espera de ${tiempoEspA} minutos con el Dr. Gomez`);
         tiempoEspAT();
     }
-    return listaA += `\n Consulta ${consutasA+=1} a el/la sr/sra ${nombreCom}`;
+    consultas += 1;
+    abogado = "Dr. Gomez";
+    return lista.push(new turno(consultas, abogado, nombreCom, new Date()));
 }
 
-function drFerraro() {
+const  drFerraro = () => {
     if (tiempoEspB == 0) {
         alert(`${nombreCom} No tiene tiempo de espera con el Dr. Ferraro`);
         tiempoEspBT();
@@ -25,10 +32,12 @@ function drFerraro() {
         alert(`${nombreCom} Tiene un tiempo de espera de ${tiempoEspB} minutos con el Dr. Ferraro`);
         tiempoEspBT();
     }
-    return listaB += `\n Consulta ${consutasB+=1} a el/la sr/sra ${nombreCom}`;
+    consultas += 1;
+    abogado = "Dr. Ferraro";
+    return lista.push(new turno(consultas, abogado, nombreCom, new Date()));
 }
 
-function menorEsp() {
+const  menorEsp = () => {
     if (tiempoEspA <= tiempoEspB) {
         menorTiempo = tiempoEspA;
     } else {
@@ -37,25 +46,31 @@ function menorEsp() {
     return menorTiempo;
 }
 
-function atendidos() {
-    alert(`El Dr. Gomez atendió: ${listaA}`);
-    alert(`El Dr. Ferraro atendió: ${listaB}`);
+const atendidos = () => {
+    for (const Cliente of lista) {
+        listaTurnos += `\n\nTurno ${Cliente.Turno}\n   Abogado: ${Cliente.Abogado}\n   Cliente: ${Cliente.Cliente}\n   Registro: ${Cliente.Horario}`
+    }
+
+    alert(`Los turnos registrados el día de hoy fueron:${listaTurnos}`);
 }
 
 let tiempoEspA = 0;
 let tiempoEspB = 0;
 let menorTiempo = 0;
-let consutasA = 0;
-let consutasB = 0;
-let listaA = "";
-let listaB = "";
+let consultas = 0;
+let nombreCom = "";
+let listaTurnos = "";
+let trabajo = false;
+const lista = [];
 
-let nombreCom = prompt("Ingrese su nombre completo separado con espacios Ej: Nombre Apellido ...");
 let profesional = prompt("Ingrese con que abogado desea tener la cita:\n X) El turno más proximo\n A) Dr. Gomez\n B) Dr. Ferraro");
 
 while ((profesional != "Salir") && (profesional != null)) {
 
-    switch (profesional) {
+    nombreCom = prompt("Ingrese su nombre completo separado con espacios Ej: Nombre Apellido ...");
+    trabajo = true;
+
+    switch (profesional.toUpperCase()) {
 
         case "A":
             drGomez();
@@ -78,12 +93,9 @@ while ((profesional != "Salir") && (profesional != null)) {
             break;
     }
 
-    nombreCom = prompt("Ingrese su nombre completo separado con espacios Ej: Nombre Apellido ...");
-
-
     menorEsp();
 
     profesional = prompt(`Ingrese con que abogado desea tener la cita: \nX) El turno más proximo ${menorTiempo} minutos \nA) Dr. Gomez tiempo de espera de ${tiempoEspA} minutos \nB) Dr. Ferraro tiempo de espera de ${tiempoEspB} minutos`);
 }
 
-atendidos ();
+atendidos();
