@@ -4,14 +4,14 @@ const tiempoEspBT = () => tiempoEspB += 15;
 
 class turno {
     constructor(numero, abogado, cliente, horario) {
-        this.Turno = numero;
-        this.Abogado = abogado;
-        this.Cliente = cliente;
-        this.Horario = horario;
+        this.turno = numero;
+        this.abogado = abogado;
+        this.cliente = cliente.toUpperCase();
+        this.horario = horario;
     }
 }
 
-const  drGomez = () => {
+const drGomez = () => {
     if (tiempoEspA == 0) {
         alert(`${nombreCom} No tiene tiempo de espera con el Dr. Gomez`);
         tiempoEspAT();
@@ -21,10 +21,10 @@ const  drGomez = () => {
     }
     consultas += 1;
     abogado = "Dr. Gomez";
-    return lista.push(new turno(consultas, abogado, nombreCom, new Date()));
+    return lista.push(new turno(consultas, abogado, nombreCom, Date()));
 }
 
-const  drFerraro = () => {
+const drFerraro = () => {
     if (tiempoEspB == 0) {
         alert(`${nombreCom} No tiene tiempo de espera con el Dr. Ferraro`);
         tiempoEspBT();
@@ -34,10 +34,10 @@ const  drFerraro = () => {
     }
     consultas += 1;
     abogado = "Dr. Ferraro";
-    return lista.push(new turno(consultas, abogado, nombreCom, new Date()));
+    return lista.push(new turno(consultas, abogado, nombreCom, Date()));
 }
 
-const  menorEsp = () => {
+const menorEsp = () => {
     if (tiempoEspA <= tiempoEspB) {
         menorTiempo = tiempoEspA;
     } else {
@@ -47,10 +47,9 @@ const  menorEsp = () => {
 }
 
 const atendidos = () => {
-    for (const Cliente of lista) {
-        listaTurnos += `\n\nTurno ${Cliente.Turno}\n   Abogado: ${Cliente.Abogado}\n   Cliente: ${Cliente.Cliente}\n   Registro: ${Cliente.Horario}`
+    for (const turno of lista) {
+        listaTurnos += `\n\nTurno ${turno.turno}\n   Abogado: ${turno.abogado}\n   Cliente: ${turno.cliente}\n   Registro: ${turno.horario}`
     }
-
     alert(`Los turnos registrados el día de hoy fueron:${listaTurnos}`);
 }
 
@@ -58,6 +57,7 @@ let tiempoEspA = 0;
 let tiempoEspB = 0;
 let menorTiempo = 0;
 let consultas = 0;
+let abogado = "";
 let nombreCom = "";
 let listaTurnos = "";
 let trabajo = false;
@@ -98,4 +98,8 @@ while ((profesional != "Salir") && (profesional != null)) {
     profesional = prompt(`Ingrese con que abogado desea tener la cita: \nX) El turno más proximo ${menorTiempo} minutos \nA) Dr. Gomez tiempo de espera de ${tiempoEspA} minutos \nB) Dr. Ferraro tiempo de espera de ${tiempoEspB} minutos`);
 }
 
-atendidos();
+if (trabajo != false) {
+    atendidos();
+} else {
+    alert(`El día de hoy no se atendieron clientes`);
+}
