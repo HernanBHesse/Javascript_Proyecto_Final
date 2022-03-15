@@ -47,10 +47,17 @@ const menorEsp = () => {
 }
 
 const atendidos = () => {
-    for (const turno of lista) {
-        listaTurnos += `\n\nTurno ${turno.turno}\n   Abogado: ${turno.abogado}\n   Cliente: ${turno.cliente}\n   Registro: ${turno.horario}`
+    const listaGomez = lista.filter((buscar) => buscar.abogado.includes("Dr. Gomez"));
+    const listaFerraro = lista.filter((buscar) => buscar.abogado.includes("Dr. Ferraro"));
+
+    for (const cliente of listaGomez) {
+        listaTurnosGomez += `\n\nTurno ${cliente.turno}\n   Cliente: ${cliente.cliente}\n   Registro: ${cliente.horario}`;
     }
-    alert(`Los turnos registrados el día de hoy fueron:${listaTurnos}`);
+    for (const cliente of listaFerraro) {
+        listaTurnosFerraro += `\n\nTurno ${cliente.turno}\n   Cliente: ${cliente.cliente}\n   Registro: ${cliente.horario}`;
+    }
+    alert(`Los turnos registrados el día de hoy por el Dr. Gomez fueron:${listaTurnosGomez}`);
+    alert(`Los turnos registrados el día de hoy por el Dr. Ferraro fueron:${listaTurnosFerraro}`);
 }
 
 let tiempoEspA = 0;
@@ -59,7 +66,8 @@ let menorTiempo = 0;
 let consultas = 0;
 let abogado = "";
 let nombreCom = "";
-let listaTurnos = "";
+let listaTurnosGomez = "";
+let listaTurnosFerraro = "";
 let trabajo = false;
 const lista = [];
 
