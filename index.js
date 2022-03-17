@@ -1,7 +1,3 @@
-const tiempoEspAT = () => tiempoEspA += 15;
-
-const tiempoEspBT = () => tiempoEspB += 15;
-
 class turno {
     constructor(numero, abogado, cliente, horario) {
         this.turno = numero;
@@ -11,7 +7,24 @@ class turno {
     }
 }
 
-const drGomez = () => {
+tiempoEspAT = () => tiempoEspA += 15;
+
+tiempoEspBT = () => tiempoEspB += 15;
+
+horaDeRegistro = () => {
+    consultas += 1;
+    let horario = new Date();
+    let hora = horario.getHours();
+    hora = (hora < 10) ? `0${hora}` : hora;
+    let minutos = horario.getMinutes();
+    minutos = (minutos < 10) ? `0${minutos}` : minutos;
+    let segundos = horario.getSeconds();
+    segundos = (segundos < 10) ? `0${segundos}` : segundos;
+    let horaTurno = `${hora}:${minutos}:${segundos}`;
+    return lista.push(new turno(consultas, abogado, nombreCom, horaTurno));
+}
+
+drGomez = () => {
     if (tiempoEspA == 0) {
         alert(`${nombreCom} No tiene tiempo de espera con el Dr. Gomez`);
         tiempoEspAT();
@@ -19,12 +32,11 @@ const drGomez = () => {
         alert(`${nombreCom} Tiene un tiempo de espera de ${tiempoEspA} minutos con el Dr. Gomez`);
         tiempoEspAT();
     }
-    consultas += 1;
     abogado = "Dr. Gomez";
-    return lista.push(new turno(consultas, abogado, nombreCom, Date()));
+    horaDeRegistro();
 }
 
-const drFerraro = () => {
+drFerraro = () => {
     if (tiempoEspB == 0) {
         alert(`${nombreCom} No tiene tiempo de espera con el Dr. Ferraro`);
         tiempoEspBT();
@@ -32,12 +44,11 @@ const drFerraro = () => {
         alert(`${nombreCom} Tiene un tiempo de espera de ${tiempoEspB} minutos con el Dr. Ferraro`);
         tiempoEspBT();
     }
-    consultas += 1;
     abogado = "Dr. Ferraro";
-    return lista.push(new turno(consultas, abogado, nombreCom, Date()));
+    horaDeRegistro();
 }
 
-const menorEsp = () => {
+menorEsp = () => {
     if (tiempoEspA <= tiempoEspB) {
         menorTiempo = tiempoEspA;
     } else {
@@ -46,18 +57,19 @@ const menorEsp = () => {
     return menorTiempo;
 }
 
-const atendidos = () => {
+atendidos = () => {
     const listaGomez = lista.filter((buscar) => buscar.abogado.includes("Dr. Gomez"));
     const listaFerraro = lista.filter((buscar) => buscar.abogado.includes("Dr. Ferraro"));
 
     for (const cliente of listaGomez) {
-        listaTurnosGomez += `\n\nTurno ${cliente.turno}\n   Cliente: ${cliente.cliente}\n   Registro: ${cliente.horario}`;
+        let listaTurnosGomez = document.getElementById("drGomez");
+        listaTurnosGomez.innerHTML += `<li><p>Turno ${cliente.turno}  Cliente: ${cliente.cliente}  Registro: ${cliente.horario}</p></li>`;
     }
+
     for (const cliente of listaFerraro) {
-        listaTurnosFerraro += `\n\nTurno ${cliente.turno}\n   Cliente: ${cliente.cliente}\n   Registro: ${cliente.horario}`;
+        let listaTurnosFerraro = document.getElementById("drFerraro");
+        listaTurnosFerraro.innerHTML += `<li><p>Turno ${cliente.turno}  Cliente: ${cliente.cliente}  Registro: ${cliente.horario}</p></li>`;
     }
-    alert(`Los turnos registrados el día de hoy por el Dr. Gomez fueron:${listaTurnosGomez}`);
-    alert(`Los turnos registrados el día de hoy por el Dr. Ferraro fueron:${listaTurnosFerraro}`);
 }
 
 let tiempoEspA = 0;
@@ -66,8 +78,6 @@ let menorTiempo = 0;
 let consultas = 0;
 let abogado = "";
 let nombreCom = "";
-let listaTurnosGomez = "";
-let listaTurnosFerraro = "";
 let trabajo = false;
 const lista = [];
 
