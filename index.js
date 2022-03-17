@@ -63,12 +63,16 @@ atendidos = () => {
 
     for (const cliente of listaGomez) {
         let listaTurnosGomez = document.getElementById("drGomez");
-        listaTurnosGomez.innerHTML += `<li><p>Turno ${cliente.turno}  Cliente: ${cliente.cliente}  Registro: ${cliente.horario}</p></li>`;
+        listaTurnosGomez.innerHTML += `<li><pre><p class="textFuerte">Turno ${cliente.turno}</p>
+        Cliente: ${cliente.cliente}
+        Hora de registro: ${cliente.horario}</pre></li>`;
     }
 
     for (const cliente of listaFerraro) {
         let listaTurnosFerraro = document.getElementById("drFerraro");
-        listaTurnosFerraro.innerHTML += `<li><p>Turno ${cliente.turno}  Cliente: ${cliente.cliente}  Registro: ${cliente.horario}</p></li>`;
+        listaTurnosFerraro.innerHTML += `<li><pre><p class="textFuerte">Turno ${cliente.turno}</p>
+        Cliente: ${cliente.cliente}
+        Hora de registro: ${cliente.horario}</pre></li>`;
     }
 }
 
