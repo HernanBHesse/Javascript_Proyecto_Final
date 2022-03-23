@@ -60,19 +60,41 @@ menorEsp = () => {
 atendidos = () => {
     const listaGomez = lista.filter((buscar) => buscar.abogado.includes("Dr. Gomez"));
     const listaFerraro = lista.filter((buscar) => buscar.abogado.includes("Dr. Ferraro"));
-
     for (const cliente of listaGomez) {
         let listaTurnosGomez = document.getElementById("drGomez");
         listaTurnosGomez.innerHTML += `<li><pre><p class="textFuerte">Turno ${cliente.turno}</p>
         Cliente: ${cliente.cliente}
         Hora de registro: ${cliente.horario}</pre></li>`;
     }
-
     for (const cliente of listaFerraro) {
         let listaTurnosFerraro = document.getElementById("drFerraro");
         listaTurnosFerraro.innerHTML += `<li><pre><p class="textFuerte">Turno ${cliente.turno}</p>
         Cliente: ${cliente.cliente}
         Hora de registro: ${cliente.horario}</pre></li>`;
+    }
+}
+
+cargarTurno = () => {
+    switch (profesional.toUpperCase()) {
+        case "A":
+            drGomez();
+            break;
+        case "B":
+            drFerraro();
+            break;
+        case "X":
+            if (tiempoEspA <= tiempoEspB) {
+                drGomez();
+            } else {
+                drFerraro();
+            }
+            break;
+        case "T":
+            atendidos();
+            break;
+        default:
+            alert(`${profesional} no es una opción valida`);
+            break;
     }
 }
 
@@ -82,46 +104,18 @@ let menorTiempo = 0;
 let consultas = 0;
 let abogado = "";
 let nombreCom = "";
+let profesional = "";
 let trabajo = false;
 const lista = [];
 
-let profesional = prompt("Ingrese con que abogado desea tener la cita:\n X) El turno más proximo\n A) Dr. Gomez\n B) Dr. Ferraro");
-
-while ((profesional != "Salir") && (profesional != null)) {
-
-    nombreCom = prompt("Ingrese su nombre completo separado con espacios Ej: Nombre Apellido ...");
-    trabajo = true;
-
-    switch (profesional.toUpperCase()) {
-
-        case "A":
-            drGomez();
-            break;
-
-        case "B":
-            drFerraro();
-            break;
-
-        case "X":
-            if (tiempoEspA <= tiempoEspB) {
-                drGomez();
-            } else {
-                drFerraro();
-            }
-            break;
-
-        default:
-            alert(`${profesional} no es una opción valida`);
-            break;
-    }
-
+let miFormulario = document.getElementById("formulario");
+formulario.addEventListener("submit", (evento) => {
+    evento.preventDefault();
+    console.log("Turno cargado");
+    let formulario = evento.target
+    nombreCom = `${formulario.children[1].value}`;
+    profesional = `${formulario.children[3].value}`;
+    document.getElementById("formulario").reset();
+    cargarTurno();
     menorEsp();
-
-    profesional = prompt(`Ingrese con que abogado desea tener la cita: \nX) El turno más proximo ${menorTiempo} minutos \nA) Dr. Gomez tiempo de espera de ${tiempoEspA} minutos \nB) Dr. Ferraro tiempo de espera de ${tiempoEspB} minutos`);
-}
-
-if (trabajo != false) {
-    atendidos();
-} else {
-    alert(`El día de hoy no se atendieron clientes`);
-}
+});
