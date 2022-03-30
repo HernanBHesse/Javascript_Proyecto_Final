@@ -1,3 +1,4 @@
+// Constructor para los objetos
 class turno {
     constructor(abogado, cliente, horario) {
         this.abogado = abogado;
@@ -6,6 +7,7 @@ class turno {
     }
 }
 
+// Declaración de variables
 let tiempoEspA = 0;
 let tiempoEspB = 0;
 let menorTiempo = 0;
@@ -14,13 +16,13 @@ let consultasHoy = 1;
 let abogado = "";
 let nombreCom = "";
 let profesional = "";
-let trabajo = false;
 const lista = [];
 
+// Funciones que aumentan el tiempo de espera
 tiempoEspAT = () => tiempoEspA += 15;
-
 tiempoEspBT = () => tiempoEspB += 15;
 
+// Función para extraer del constructor Date solo el horario
 horaDeRegistro = () => {
     let horario = new Date();
     let hora = horario.getHours();
@@ -32,6 +34,7 @@ horaDeRegistro = () => {
     return horaTurno = `${hora}:${minutos}:${segundos}`;
 }
 
+// Función para mostrar en el HTML cada turno nuevo
 agregarCliente = (profesional) => {
     horaDeRegistro();
     nuevoCliente = `N° ${consultasHoy} - ${nombreCom} - ${horaTurno}`;
@@ -42,6 +45,7 @@ agregarCliente = (profesional) => {
     consultasHoy++;
 }
 
+// Función para cada opción
 drGomez = () => {
     if (tiempoEspA == 0) {
         alert(`${nombreCom} No tiene tiempo de espera con el Dr. Gomez`);
@@ -68,6 +72,7 @@ drFerraro = () => {
     agregarCliente("drFerraroHoy");
 }
 
+// Busco el menor tiempo de espera
 menorEsp = () => {
     if (tiempoEspA <= tiempoEspB) {
         menorTiempo = tiempoEspA;
@@ -77,6 +82,7 @@ menorEsp = () => {
     return menorTiempo;
 }
 
+// Función para discriminar por abogado los datos guardados en el localStorage
 atendidos = () => {
     const listaGomez = lista.filter((buscar) => buscar.abogado.includes("Dr. Gomez"));
     const listaFerraro = lista.filter((buscar) => buscar.abogado.includes("Dr. Ferraro"));
@@ -94,6 +100,7 @@ atendidos = () => {
     }
 }
 
+// Switch para llamar a cada grupo de funciones según elección del usuario
 cargarTurno = () => {
     switch (profesional.toUpperCase()) {
         case "A":
@@ -118,6 +125,7 @@ cargarTurno = () => {
     }
 }
 
+// Función para crear un array con los objetos creados desde los datos del formulario y mostrarlos en clientes.html
 window.addEventListener("load", () => {
     for (let i = 0; i < localStorage.length; i++) {
         let clave = localStorage.key(i);
@@ -129,7 +137,7 @@ window.addEventListener("load", () => {
     atendidos();
 })
 
-
+// Función para tomar los datos desde el formulario
 let miFormulario = document.getElementById("formulario");
 formulario.addEventListener("submit", (evento) => {
     evento.preventDefault();
@@ -139,8 +147,8 @@ formulario.addEventListener("submit", (evento) => {
     document.getElementById("formulario").reset();
     cargarTurno();
 
+    // Genero el turnosobjeto turnos y guardo cada ingreso por fecha.
     let dia = new Date();
-
     let turnos = new turno(abogado, nombreCom, dia.toLocaleDateString());
     let nTurnos = "turno" + consultas;
     consultas++;
