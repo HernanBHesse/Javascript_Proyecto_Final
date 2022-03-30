@@ -20,12 +20,12 @@ body {
     grid-auto-flow: row;
 }
 
-.header {
+header {
     grid-area: 1 / 1 / 2 / 3;
     justify-self: center;
     align-self: center;
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
     margin: 0.5rem 0;
     padding: 0.3rem;
@@ -35,6 +35,40 @@ body {
     border-radius: 0.5rem;
     box-shadow: 3px 3px 5px 0px rgb(0 0 0 / 30%);
 }
+
+
+.header--general {
+    display: flex;
+    justify-content: space-between;
+    background-color: rgba(255, 255, 255);
+    border-radius: 1rem;
+    box-shadow: 3px 3px 5px 0px rgb(0 0 0 / 30%);
+}
+
+header nav ul {
+    margin: 0.5rem;
+}
+
+header nav ul li {
+    display: inline-block;
+    margin: 0.5rem;
+    font-size: 1.2rem;
+    font-weight: 900;
+}
+
+header nav ul a {
+    text-decoration: none;
+    color: #000ba0;
+}
+
+a:hover {
+    color: #0084ff;
+}
+
+.linkActive {
+    color: rgb(255, 0, 0);
+}
+
 
 h1 {
     font-size: 48px;

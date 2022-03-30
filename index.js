@@ -1,18 +1,27 @@
 class turno {
-    constructor(numero, abogado, cliente, horario) {
-        this.turno = numero;
+    constructor(abogado, cliente, horario) {
         this.abogado = abogado;
         this.cliente = cliente.toUpperCase();
-        this.horario = horario;
+        this.horario = horario.toString();
     }
 }
+
+let tiempoEspA = 0;
+let tiempoEspB = 0;
+let menorTiempo = 0;
+let consultas = 0;
+let consultasHoy = 1;
+let abogado = "";
+let nombreCom = "";
+let profesional = "";
+let trabajo = false;
+const lista = [];
 
 tiempoEspAT = () => tiempoEspA += 15;
 
 tiempoEspBT = () => tiempoEspB += 15;
 
 horaDeRegistro = () => {
-    consultas += 1;
     let horario = new Date();
     let hora = horario.getHours();
     hora = (hora < 10) ? `0${hora}` : hora;
@@ -20,8 +29,17 @@ horaDeRegistro = () => {
     minutos = (minutos < 10) ? `0${minutos}` : minutos;
     let segundos = horario.getSeconds();
     segundos = (segundos < 10) ? `0${segundos}` : segundos;
-    let horaTurno = `${hora}:${minutos}:${segundos}`;
-    return lista.push(new turno(consultas, abogado, nombreCom, horaTurno));
+    return horaTurno = `${hora}:${minutos}:${segundos}`;
+}
+
+agregarCliente = (profesional) => {
+    horaDeRegistro();
+    nuevoCliente = `N° ${consultasHoy} - ${nombreCom} - ${horaTurno}`;
+    const node = document.createElement("li");
+    const textnode = document.createTextNode(nuevoCliente);
+    node.appendChild(textnode);
+    document.getElementById(profesional).appendChild(node);
+    consultasHoy++;
 }
 
 drGomez = () => {
@@ -33,7 +51,8 @@ drGomez = () => {
         tiempoEspAT();
     }
     abogado = "Dr. Gomez";
-    horaDeRegistro();
+
+    agregarCliente("drGomezHoy");
 }
 
 drFerraro = () => {
@@ -45,7 +64,8 @@ drFerraro = () => {
         tiempoEspBT();
     }
     abogado = "Dr. Ferraro";
-    horaDeRegistro();
+
+    agregarCliente("drFerraroHoy");
 }
 
 menorEsp = () => {
@@ -62,15 +82,15 @@ atendidos = () => {
     const listaFerraro = lista.filter((buscar) => buscar.abogado.includes("Dr. Ferraro"));
     for (const cliente of listaGomez) {
         let listaTurnosGomez = document.getElementById("drGomez");
-        listaTurnosGomez.innerHTML += `<li><pre><p class="textFuerte">Turno ${cliente.turno}</p>
-        Cliente: ${cliente.cliente}
-        Hora de registro: ${cliente.horario}</pre></li>`;
+        listaTurnosGomez.innerHTML += `<li><pre><p class="textFuerte">
+            Cliente: ${cliente.cliente}
+            Hora de registro: ${cliente.horario}</pre></li>`;
     }
     for (const cliente of listaFerraro) {
         let listaTurnosFerraro = document.getElementById("drFerraro");
-        listaTurnosFerraro.innerHTML += `<li><pre><p class="textFuerte">Turno ${cliente.turno}</p>
-        Cliente: ${cliente.cliente}
-        Hora de registro: ${cliente.horario}</pre></li>`;
+        listaTurnosFerraro.innerHTML += `<li><pre><p class="textFuerte">
+            Cliente: ${cliente.cliente}
+            Hora de registro: ${cliente.horario}</pre></li>`;
     }
 }
 
@@ -98,24 +118,32 @@ cargarTurno = () => {
     }
 }
 
-let tiempoEspA = 0;
-let tiempoEspB = 0;
-let menorTiempo = 0;
-let consultas = 0;
-let abogado = "";
-let nombreCom = "";
-let profesional = "";
-let trabajo = false;
-const lista = [];
+window.addEventListener("load", () => {
+    for (let i = 0; i < localStorage.length; i++) {
+        let clave = localStorage.key(i);
+        let turnos = localStorage.getItem(clave);
+        console.log(turnos);
+        lista.push(JSON.parse(turnos));
+        consultas = i + 1;
+    }
+    atendidos();
+})
+
 
 let miFormulario = document.getElementById("formulario");
 formulario.addEventListener("submit", (evento) => {
     evento.preventDefault();
-    console.log("Turno cargado");
     let formulario = evento.target
     nombreCom = `${formulario.children[1].value}`;
     profesional = `${formulario.children[3].value}`;
     document.getElementById("formulario").reset();
     cargarTurno();
-    menorEsp();
+
+    let dia = new Date();
+
+    let turnos = new turno(abogado, nombreCom, dia.toLocaleDateString());
+    let nTurnos = "turno" + consultas;
+    consultas++;
+    localStorage.setItem(nTurnos, JSON.stringify(turnos));
+    console.log(turnos);
 });
