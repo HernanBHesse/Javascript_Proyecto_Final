@@ -169,7 +169,7 @@ p {
     box-shadow: 3px 3px 5px 0px rgb(0 0 0 / 30%);
 }
 
-.textFuerte {
+.textFuerte , li {
     font-size: 26px;
     font-weight: 600;
 }

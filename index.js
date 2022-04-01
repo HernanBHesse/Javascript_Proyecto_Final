@@ -8,10 +8,12 @@ class turno {
 }
 
 // Declaración de variables
+let pagina = document.title;
 let tiempoEspA = 0;
 let tiempoEspB = 0;
 let menorTiempo = 0;
-let consultas = 0;
+let consultas = localStorage.length;
+let formulario = document.getElementById("formulario");
 let consultasHoy = 1;
 let abogado = "";
 let nombreCom = "";
@@ -26,10 +28,10 @@ tiempoEspBT = () => tiempoEspB += 15;
 horaDeRegistro = () => {
     let horario = new Date();
     let hora = horario.getHours();
-    hora = (hora < 10) ? `0${hora}` : hora;
     let minutos = horario.getMinutes();
-    minutos = (minutos < 10) ? `0${minutos}` : minutos;
     let segundos = horario.getSeconds();
+    hora = (hora < 10) ? `0${hora}` : hora;
+    minutos = (minutos < 10) ? `0${minutos}` : minutos;
     segundos = (segundos < 10) ? `0${segundos}` : segundos;
     return horaTurno = `${hora}:${minutos}:${segundos}`;
 }
@@ -47,40 +49,23 @@ agregarCliente = (profesional) => {
 
 // Función para cada opción
 drGomez = () => {
-    if (tiempoEspA == 0) {
-        alert(`${nombreCom} No tiene tiempo de espera con el Dr. Gomez`);
-        tiempoEspAT();
-    } else {
+    tiempoEspA == 0 ? alert(`${nombreCom} No tiene tiempo de espera con el Dr. Gomez`) :
         alert(`${nombreCom} Tiene un tiempo de espera de ${tiempoEspA} minutos con el Dr. Gomez`);
-        tiempoEspAT();
-    }
+    tiempoEspAT();
     abogado = "Dr. Gomez";
-
     agregarCliente("drGomezHoy");
 }
 
 drFerraro = () => {
-    if (tiempoEspB == 0) {
-        alert(`${nombreCom} No tiene tiempo de espera con el Dr. Ferraro`);
-        tiempoEspBT();
-    } else {
+    tiempoEspB == 0 ? alert(`${nombreCom} No tiene tiempo de espera con el Dr. Ferraro`) :
         alert(`${nombreCom} Tiene un tiempo de espera de ${tiempoEspB} minutos con el Dr. Ferraro`);
-        tiempoEspBT();
-    }
+    tiempoEspBT();
     abogado = "Dr. Ferraro";
-
     agregarCliente("drFerraroHoy");
 }
 
 // Busco el menor tiempo de espera
-menorEsp = () => {
-    if (tiempoEspA <= tiempoEspB) {
-        menorTiempo = tiempoEspA;
-    } else {
-        menorTiempo = tiempoEspB;
-    }
-    return menorTiempo;
-}
+menorEsp = () => tiempoEspA <= tiempoEspB ? drGomez() : drFerraro();
 
 // Función para discriminar por abogado los datos guardados en el localStorage
 atendidos = () => {
@@ -98,6 +83,9 @@ atendidos = () => {
             Cliente: ${cliente.cliente}
             Hora de registro: ${cliente.horario}</pre></li>`;
     }
+    // Reviso cada objeto por consola
+    console.log(...listaGomez);
+    console.log(...listaFerraro);
 }
 
 // Switch para llamar a cada grupo de funciones según elección del usuario
@@ -110,48 +98,37 @@ cargarTurno = () => {
             drFerraro();
             break;
         case "X":
-            if (tiempoEspA <= tiempoEspB) {
-                drGomez();
-            } else {
-                drFerraro();
-            }
-            break;
-        case "T":
-            atendidos();
-            break;
-        default:
-            alert(`${profesional} no es una opción valida`);
+            menorEsp();
             break;
     }
 }
 
-// Función para crear un array con los objetos creados desde los datos del formulario y mostrarlos en clientes.html
-window.addEventListener("load", () => {
-    for (let i = 0; i < localStorage.length; i++) {
-        let clave = localStorage.key(i);
-        let turnos = localStorage.getItem(clave);
+pagina.toUpperCase() == "INICIO" ? (
+    // Función para tomar los datos desde el formulario
+    formulario.addEventListener("submit", (evento) => {
+        evento.preventDefault();
+        let formulario = evento.target
+        nombreCom = `${formulario.children[1].value}`;
+        profesional = `${formulario.children[3].value}`;
+        document.getElementById("formulario").reset();
+        cargarTurno();
+
+        // Genero el objeto turnos y guardo cada ingreso por fecha.
+        let dia = new Date();
+        let turnos = new turno(abogado, nombreCom, dia.toLocaleDateString());
+        let nTurnos = consultas;
+        consultas++;
+        localStorage.setItem(nTurnos, JSON.stringify(turnos));
         console.log(turnos);
-        lista.push(JSON.parse(turnos));
-        consultas = i + 1;
-    }
-    atendidos();
-})
-
-// Función para tomar los datos desde el formulario
-let miFormulario = document.getElementById("formulario");
-formulario.addEventListener("submit", (evento) => {
-    evento.preventDefault();
-    let formulario = evento.target
-    nombreCom = `${formulario.children[1].value}`;
-    profesional = `${formulario.children[3].value}`;
-    document.getElementById("formulario").reset();
-    cargarTurno();
-
-    // Genero el turnosobjeto turnos y guardo cada ingreso por fecha.
-    let dia = new Date();
-    let turnos = new turno(abogado, nombreCom, dia.toLocaleDateString());
-    let nTurnos = "turno" + consultas;
-    consultas++;
-    localStorage.setItem(nTurnos, JSON.stringify(turnos));
-    console.log(turnos);
-});
+    })
+) : (
+    // Función para crear un array con los objetos creados desde los datos del formulario y mostrarlos en clientes.html desde el más antiguo al más nuevo
+    window.addEventListener("load", () => {
+        for (let i = 0; i < localStorage.length; i++) {
+            console.log(i)
+            let turnos = localStorage.getItem(i);
+            console.log(turnos);
+            lista.unshift(JSON.parse(turnos));
+        }
+        atendidos();
+    }));
