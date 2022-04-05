@@ -20,6 +20,35 @@ let nombreCom = "";
 let profesional = "";
 const lista = [];
 
+// Librerías
+turnoCargado = () => {
+    Toastify({
+        text: "Turno cargado",
+        duration: 3000,
+        gravity: 'bottom',
+        position: 'left'
+    }).showToast();
+}
+
+alertaSinEspera = () => {
+    Swal.fire({
+        icon: 'success',
+        title: `${nombreCom} no tiene tiempo de espera con el ${abogado}`,
+        showConfirmButton: false,
+        timer: 2000
+    });
+}
+
+alertaConEspera = () => {
+    Swal.fire({
+        icon: 'success',
+        title: `${nombreCom} tiene un tiempo de espera de ${tiempoEspA} minutos con el ${abogado}`,
+        showConfirmButton: false,
+        timer: 2000
+    });
+}
+
+
 // Funciones que aumentan el tiempo de espera
 tiempoEspAT = () => tiempoEspA += 15;
 tiempoEspBT = () => tiempoEspB += 15;
@@ -49,18 +78,16 @@ agregarCliente = (profesional) => {
 
 // Función para cada opción
 drGomez = () => {
-    tiempoEspA == 0 ? alert(`${nombreCom} No tiene tiempo de espera con el Dr. Gomez`) :
-        alert(`${nombreCom} Tiene un tiempo de espera de ${tiempoEspA} minutos con el Dr. Gomez`);
-    tiempoEspAT();
     abogado = "Dr. Gomez";
+    tiempoEspA == 0 ? alertaSinEspera() : alertaConEspera();
+    tiempoEspAT();
     agregarCliente("drGomezHoy");
 }
 
 drFerraro = () => {
-    tiempoEspB == 0 ? alert(`${nombreCom} No tiene tiempo de espera con el Dr. Ferraro`) :
-        alert(`${nombreCom} Tiene un tiempo de espera de ${tiempoEspB} minutos con el Dr. Ferraro`);
-    tiempoEspBT();
     abogado = "Dr. Ferraro";
+    tiempoEspB == 0 ? alertaSinEspera() : alertaConEspera();
+    tiempoEspBT();
     agregarCliente("drFerraroHoy");
 }
 
@@ -119,7 +146,7 @@ pagina.toUpperCase() == "INICIO" ? (
         let nTurnos = consultas;
         consultas++;
         localStorage.setItem(nTurnos, JSON.stringify(turnos));
-        console.log(turnos);
+        turnoCargado();
     })
 ) : (
     // Función para crear un array con los objetos creados desde los datos del formulario y mostrarlos en clientes.html desde el más antiguo al más nuevo
