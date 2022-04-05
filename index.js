@@ -24,7 +24,7 @@ const lista = [];
 turnoCargado = () => {
     Toastify({
         text: "Turno cargado",
-        duration: 3000,
+        duration: 6000,
         gravity: 'bottom',
         position: 'left'
     }).showToast();
@@ -35,7 +35,7 @@ alertaSinEspera = () => {
         icon: 'success',
         title: `${nombreCom} no tiene tiempo de espera con el ${abogado}`,
         showConfirmButton: false,
-        timer: 2000
+        timer: 4000
     });
 }
 
@@ -44,7 +44,7 @@ alertaConEspera = () => {
         icon: 'success',
         title: `${nombreCom} tiene un tiempo de espera de ${tiempoEspA} minutos con el ${abogado}`,
         showConfirmButton: false,
-        timer: 2000
+        timer: 4000
     });
 }
 
