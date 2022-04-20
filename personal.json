@@ -1,0 +1,32 @@
+[
+    {
+        "nombre": "Juan Gomez",
+        "cargo": "Abogado",
+        "telefono": 1560809070,
+        "antiguedad": 10
+    },
+    {
+        "nombre": "Gustavo Ferraro",
+        "cargo": "Abogado",
+        "telefono": 1560809060,
+        "antiguedad": 10
+    },
+    {
+        "nombre": "Roberto Mamani",
+        "cargo": "Encargado",
+        "telefono": 1560809050,
+        "antiguedad": 4
+    },
+    {
+        "nombre": "Ana Lopez",
+        "cargo": "Contadora",
+        "telefono": 1560809010,
+        "antiguedad": 8
+    },
+    {
+        "nombre": "Alan Juncal",
+        "cargo": "Recepcionista",
+        "telefono": 1560809020,
+        "antiguedad": 3
+    }
+]

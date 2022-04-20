@@ -100,15 +100,21 @@ atendidos = () => {
     const listaFerraro = lista.filter((buscar) => buscar.abogado.includes("Dr. Ferraro"));
     for (const cliente of listaGomez) {
         let listaTurnosGomez = document.getElementById("drGomez");
-        listaTurnosGomez.innerHTML += `<li><pre><p class="textFuerte">
-            Cliente: ${cliente.cliente}
-            Hora de registro: ${cliente.horario}</pre></li>`;
+        listaTurnosGomez.innerHTML += `
+        <tr>
+            <th scope="row">${cliente.cliente}</th>
+            <td>${cliente.horario}</td>
+          </tr>
+          `;
     }
     for (const cliente of listaFerraro) {
         let listaTurnosFerraro = document.getElementById("drFerraro");
-        listaTurnosFerraro.innerHTML += `<li><pre><p class="textFuerte">
-            Cliente: ${cliente.cliente}
-            Hora de registro: ${cliente.horario}</pre></li>`;
+        listaTurnosFerraro.innerHTML += `
+        <tr>
+            <th scope="row">${cliente.cliente}</th>
+            <td>${cliente.horario}</td>
+          </tr>
+          `;
     }
     // Reviso cada objeto por consola
     console.log(...listaGomez);
@@ -130,32 +136,57 @@ cargarTurno = () => {
     }
 }
 
-pagina.toUpperCase() == "INICIO" ? (
-    // Función para tomar los datos desde el formulario
-    formulario.addEventListener("submit", (evento) => {
-        evento.preventDefault();
-        let formulario = evento.target
-        nombreCom = `${formulario.children[1].value}`;
-        profesional = `${formulario.children[3].value}`;
-        document.getElementById("formulario").reset();
-        cargarTurno();
+// Función para tomar datos desde el archivo json y mostrarlo por en la pagina de personal
+personal = (datos) => {
+    let listaPersonal = document.getElementById("listadoPersonal");
+    for (let nombre of datos) {
+        listaPersonal.innerHTML += `
+        <tr>
+            <th scope="row">${nombre.cargo}</th>
+            <td>${nombre.nombre}</td>
+            <td>${nombre.telefono}</td>
+            <td>${nombre.antiguedad}</td>
+          </tr>
+          `;
+    }
+}
 
-        // Genero el objeto turnos y guardo cada ingreso por fecha.
-        let dia = new Date();
-        let turnos = new turno(abogado, nombreCom, dia.toLocaleDateString());
-        let nTurnos = consultas;
-        consultas++;
-        localStorage.setItem(nTurnos, JSON.stringify(turnos));
-        turnoCargado();
-    })
-) : (
-    // Función para crear un array con los objetos creados desde los datos del formulario y mostrarlos en clientes.html desde el más antiguo al más nuevo
-    window.addEventListener("load", () => {
-        for (let i = 0; i < localStorage.length; i++) {
-            console.log(i)
-            let turnos = localStorage.getItem(i);
-            console.log(turnos);
-            lista.unshift(JSON.parse(turnos));
-        }
-        atendidos();
-    }));
+pagina.toUpperCase() == "INICIO" ? (
+        // Función para tomar los datos desde el formulario
+        formulario.addEventListener("submit", (evento) => {
+            evento.preventDefault();
+            let formulario = evento.target
+            nombreCom = `${formulario.children[1].value}`;
+            profesional = `${formulario.children[3].value}`;
+            document.getElementById("formulario").reset();
+            cargarTurno();
+
+            // Genero el objeto turnos y guardo cada ingreso por fecha.
+            let dia = new Date();
+            let turnos = new turno(abogado, nombreCom, dia.toLocaleDateString());
+            let nTurnos = consultas;
+            consultas++;
+            localStorage.setItem(nTurnos, JSON.stringify(turnos));
+            turnoCargado();
+        })
+    ) :
+    pagina.toUpperCase() == "CLIENTES" ? (
+        // Función para crear un array con los objetos creados desde los datos del formulario y mostrarlos en clientes.html desde el más antiguo al más nuevo
+        window.addEventListener("load", () => {
+            for (let i = 0; i < localStorage.length; i++) {
+                console.log(i)
+                let turnos = localStorage.getItem(i);
+                console.log(turnos);
+                lista.unshift(JSON.parse(turnos));
+            }
+            atendidos();
+        })
+    ) : (
+        // Función para crear un listado del personal almacenado en el archivo json
+        window.addEventListener("load", () => {
+            fetch('personal.json')
+                .then(res => res.json())
+                .then(datos => {
+                    personal(datos);
+                })
+        }));
