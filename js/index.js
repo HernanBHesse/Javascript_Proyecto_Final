@@ -62,7 +62,7 @@ pagina.toUpperCase() == "INICIO" ? (
             atendidos(listaHoy);
             let boton = document.getElementById("borrar");
             boton.onclick = () => {
-                borrar ();
+                borrar();
             }
         })
     ) : (
@@ -244,16 +244,16 @@ borrar = () => {
         confirmButtonText: 'Si, borrar',
         cancelButtonText: 'No, salir',
         backdrop: 'rgba(255, 0, 0, 0.5)'
-      }).then((result) => {
+    }).then((result) => {
         if (result.isConfirmed) {
             localStorage.clear();
             sessionStorage.clear();
-          Swal.fire(
-            'Borrado!',
-            'Todo el registro fue borrado',
-            'success'
-            
-          )
+            Swal.fire(
+                'Borrado!',
+                'Todo el registro fue borrado',
+                'success'
+            )
+            setTimeout(window.location.reload.bind(window.location), 3000);
         }
-      })
+    })
 }
